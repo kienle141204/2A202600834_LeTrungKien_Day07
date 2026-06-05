@@ -4,6 +4,31 @@ import math
 import re
 
 
+def preprocess_legal_markdown(text: str) -> str:
+    """Remove PDF-to-Markdown artifacts from Vietnamese legal documents.
+
+    Cleans up:
+    - Pure separator lines (----, ****, ====)
+    - Lines that are only punctuation/symbols with no legal content
+    - Collapses 3+ consecutive blank lines into one blank line
+    """
+    lines = text.splitlines()
+    cleaned: list[str] = []
+    for line in lines:
+        stripped = line.strip()
+        # Remove pure separator lines (dashes, asterisks, equals, underscores)
+        if re.fullmatch(r'[-*=_]{2,}', stripped):
+            continue
+        # Remove lines that are only symbols/punctuation artifacts (no CJK/Latin letters)
+        if stripped and not re.search(r'[A-Za-zÀ-ỹ\d]', stripped):
+            continue
+        cleaned.append(line)
+
+    # Collapse 3+ consecutive blank lines into a single blank line
+    result = re.sub(r'\n{3,}', '\n\n', '\n'.join(cleaned))
+    return result.strip()
+
+
 class FixedSizeChunker:
     """
     Split text into fixed-size chunks with optional overlap.

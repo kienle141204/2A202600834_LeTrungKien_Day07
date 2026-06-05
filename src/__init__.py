@@ -5,6 +5,7 @@ from .chunking import (
     RecursiveChunker,
     SentenceChunker,
     compute_similarity,
+    preprocess_legal_markdown,
 )
 from .embeddings import (
     EMBEDDING_PROVIDER_ENV,
@@ -25,6 +26,7 @@ __all__ = [
     "RecursiveChunker",
     "ChunkingStrategyComparator",
     "compute_similarity",
+    "preprocess_legal_markdown",
     "EmbeddingStore",
     "KnowledgeBaseAgent",
     "MockEmbedder",
